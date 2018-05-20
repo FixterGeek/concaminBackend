@@ -2,6 +2,11 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const skillSchema = new Schema({
+    tipo:{
+        type:String,
+        enum:["EDU", "PRO"],
+        default:"PRO"
+    },
     user:{
         type:Schema.Types.ObjectId,
         ref:"User",

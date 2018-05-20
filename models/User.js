@@ -43,7 +43,8 @@ const userSchema = new Schema({
     institution:{
         type:Schema.Types.ObjectId,
         ref:'Institution'
-    }
+    },
+    bio:String
 
 },{
     timestamps:{

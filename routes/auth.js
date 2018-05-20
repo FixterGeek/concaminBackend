@@ -11,6 +11,20 @@ function isAuth(req,res,next){
     }
 }
 
+router.get('/users/:id', isAuth, (req,res)=>{
+    const promise = Promise.all([User.findById(req.user._id), User.findById(req.params.id)]);
+    promise
+    .then(results=>{
+        if(results[0] in results[1].followers){
+            results[1].follow = true;
+        }else{
+            results[1].follow = false;
+        }
+        res.json(results[1]);
+    })
+    .catch(e=>next(e))
+});
+
 router.post('/signup', (req,res)=>{
     User.register(req.body, req.body.password, (err, user)=>{
         if(err) return res.status(500).json(err);

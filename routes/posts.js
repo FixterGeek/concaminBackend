@@ -27,6 +27,7 @@ router.get('/',
     isAuth, 
     (req,res)=>{
         Post.find()
+        .sort('-created_at')
         .then(posts=>{
             res.json(posts);
         })

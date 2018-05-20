@@ -12,10 +12,6 @@ const postSchema = new Schema({
         ref:'User',
         required:true
     },
-    title:{
-        type:String,
-        required:true
-    },
     body:{
         type:String
     },

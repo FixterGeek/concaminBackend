@@ -24,7 +24,11 @@ const postSchema = new Schema({
     comments:[{
         type:Schema.Types.ObjectId,
         ref:'Comment'
-    }]
+    }],
+    love:{
+        type:Number,
+        default:0
+    }
 
 },{
     timestamps:{

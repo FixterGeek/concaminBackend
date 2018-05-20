@@ -28,7 +28,11 @@ router.get('/users/:id', isAuth, (req,res)=>{
 router.post('/signup', (req,res)=>{
     User.register(req.body, req.body.password, (err, user)=>{
         if(err) return res.status(500).json(err);
-        res.json(user);
+        passport.authenticate('local')(req,res, ()=>{
+            console.log(req.user)
+            res.json(req.user);
+        });
+        
     })
 });
 

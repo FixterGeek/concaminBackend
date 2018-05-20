@@ -7,18 +7,18 @@ const userSchema = new Schema({
         type:String,
         required:true
     },
+    job:String,
     email:{
         type:String,
         required:true
     },
     profilePic:String,
-    name:String,
-    surName:String,
-    lastName:String,
+    cover:String,
+    fullName:String,
     birthday:Date,
     skills:[
         {
-            type:Schema.Types.ObjectId,
+            type: Schema.Types.ObjectId,
             ref:"Skill"
         }
     ],

@@ -12,9 +12,12 @@ function isAuth(req,res,next){
 
 router.post('/', 
     isAuth, 
-    updates.single('image'),
+    updates.fields([{name:'image', maxCount:1}, {name:'file', maxCount:1}]),
     (req,res, next)=>{
-        if(req.file) req.body.image = req.file.url;
+
+        if(req.files.image) req.body.image = req.file.image.url;
+        if(req.files.file) req.body.file = req.file.file.url;
+        
         req.body.user = req.user._id;
         Post.create(req.body)
         .then(post=>{

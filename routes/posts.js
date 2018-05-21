@@ -18,7 +18,11 @@ router.post('/',
         //if(req.files.image) req.body.image = req.file.image.url;
         if(req.file) req.body.image = req.file.url;
 
+        //extra settings
+        req.body.links = req.body.links.split(',');
         req.body.user = req.user._id;
+
+
         Post.create(req.body)
         .then(post=>{
             res.json(post);

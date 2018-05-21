@@ -24,7 +24,6 @@ router.post('/',
 
 
         Post.create(req.body)
-        .populate('user')
         .then(post=>{
             res.json(post);
         })
@@ -35,6 +34,7 @@ router.get('/',
     isAuth, 
     (req,res)=>{
         Post.find()
+        .populate('user')
         .sort('-created_at')
         .then(posts=>{
             res.json(posts);

@@ -19,14 +19,17 @@ router.post('/',
         if(req.file) req.body.image = req.file.url;
 
         //extra settings
-        req.body.links = req.body.links.split(',');
+        if(req.body.links) req.body.links = req.body.links.split(',');
         req.body.user = req.user._id;
 
 
         Post.create(req.body)
-        // .populate('user')
         .then(post=>{
-            res.json(post);
+            return Post.findById(post._id).populate('user')
+            
+        })
+        .then(p=>{
+            res.json(p);
         })
         .catch(e=>next(e));
 });

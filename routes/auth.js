@@ -71,9 +71,11 @@ uploads.fields([{name:"profilePic", maxCount:1}, {name:"cover", maxCount:1}]),
 router.get('/logged', 
 isAuth,
  (req,res)=>{
-    res.json(req.user);
-    // User.findOne()
-    // .then(user=>res.json(user))
+    //res.json(req.user);
+
+    User.findById(req.user._id)
+        .populate('following')
+        .then(user=>res.json(user))
 });
 
 module.exports = router;

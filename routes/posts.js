@@ -24,6 +24,7 @@ router.post('/',
 
 
         Post.create(req.body)
+        .populate('user')
         .then(post=>{
             res.json(post);
         })

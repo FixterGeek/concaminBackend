@@ -73,6 +73,8 @@ const auth = require('./routes/auth');
 app.use('/auth', auth);
 const posts = require('./routes/posts');
 app.use('/posts', posts);
+const chats = require('./routes/chats');
+app.use('/chats', chats);
 
 
 module.exports = app;

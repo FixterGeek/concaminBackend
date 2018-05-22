@@ -48,10 +48,11 @@ router.get('/:id',
 router.post('/:id', 
 isAuth,
 (req,res,next)=>{
+    console.log("user", req.user);
+
     const {id} = req.params;
     //console.log(req.body)
-    const message = req.body;
-    Chat.findByIdAndUpdate(id, {$push:{messages:message}}, {new:true})
+    Chat.findByIdAndUpdate(id, {$push:{messages:req.body}}, {new:true})
     .then(chat=>{
         res.json(chat);
     })

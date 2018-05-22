@@ -20,6 +20,7 @@ router.post('/',
 
         //extra settings
         if(req.body.links) req.body.links = req.body.links.split(',');
+        else delete req.body.links;
         req.body.user = req.user._id;
 
 

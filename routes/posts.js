@@ -14,7 +14,7 @@ function isAuth(req,res,next){
 
 router.get('/own', verifyToken,(req,res,next)=>{
     let skip = 0;
-    if(req.query.skip) skip = req.query.skip;
+    if(req.query.skip) skip = Number(req.query.skip);
     Post.find({user:req.user._id, tipo:'PERSONAL'})
     .limit(10)
     .skip(skip)

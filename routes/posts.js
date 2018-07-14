@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const Post = require('../models/Post');
-const updates = require('../helpers/cloudinary');
+const uploadCloud = require('../helpers/cloudinary');
 const verifyToken = require('../helpers/jwt').verifyToken;
 
 
@@ -25,7 +25,7 @@ router.get('/own', verifyToken,(req,res,next)=>{
 
 router.post('/', 
     verifyToken, 
-    updates.fields([
+    uploadCloud.fields([
         {name:'image', maxCount:1, require:false},
         {name: 'file', maxCount:1, require:false}
     ]),
@@ -79,7 +79,7 @@ router.get('/:id',
 
 router.patch('/:id', 
     verifyToken, 
-    updates.single('image'),
+    uploadCloud.single('image'),
     (req,res)=>{
         if(req.file) req.body.image = req.file.url;
         Post.findByIdAndUpdate(req.params.id, req.body, {new:true})

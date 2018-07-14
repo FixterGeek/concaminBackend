@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const User = require('../models/User');
+const Post = require('../models/Post');
 const passport = require('passport');
 const uploads = require('../helpers/cloudinary');
 const genToken = require('../helpers/jwt').genToken;
@@ -46,7 +47,17 @@ router.post('/login',
         console.log(err)
         if(err) return res.status(500).send(err);
         if(!user) return res.status(500).send(info);
-        res.json({user:user,access_token:genToken(user)});
+
+        //pido los posts
+        Post.find({user:user._id})
+        .then(posts=>{
+            user.posts = posts;
+            res.json({user:user,access_token:genToken(user)});
+        })
+        .catch(err=>{
+            res.json({user:user,access_token:genToken(user)});
+        })
+        
     })(req, res, next);
 });
 

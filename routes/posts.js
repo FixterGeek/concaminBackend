@@ -56,7 +56,7 @@ router.get('/',
         if(req.query.skip) skip = req.query.skip;
         if(req.query.tipo) query.tipo = req.query.tipo;
         Post.find(query)
-        limit(10)
+        .limit(10)
         .skip(skip)
         .populate('user')
         .sort('-created_at')

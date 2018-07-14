@@ -2,6 +2,9 @@ const router = require('express').Router();
 const User = require('../models/User');
 const passport = require('passport');
 const uploads = require('../helpers/cloudinary');
+const genToken = require('../helpers/jwt').genToken;
+
+
 
 function isAuth(req,res,next){
     if(req.isAuthenticated()){
@@ -30,16 +33,20 @@ router.post('/signup', (req,res)=>{
         if(err) return res.status(500).json(err);
         passport.authenticate('local')(req,res, ()=>{
             console.log(req.user)
-            res.json(req.user);
+            res.json({user:req.user,access_token:genToken(user)});
         });
         
     })
 });
 
 router.post('/login',
- passport.authenticate('local'), 
- (req,res)=>{
-    res.json(req.user);
+// passport.authenticate('local'), 
+(req,res,next)=>{
+    passport.authenticate('local', (err, user, info)=>{
+        if(err) return res.status(500).send(err);
+        if(!user) return res.status(500).send(info);
+        res.json({user:user,access_token:genToken(user)});
+    })(req, res, next);
 });
 
 router.get('/logout', (req,res)=>{

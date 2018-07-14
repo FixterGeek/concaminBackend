@@ -12,6 +12,17 @@ function isAuth(req,res,next){
     }
 }
 
+router.get('/own', verifyToken,(req,res,next)=>{
+    let skip = 0;
+    if(req.query.skip) skip = req.query.skip;
+    Post.find({user:req.user._id, tipo:'PERSONAL'})
+    .limit(10)
+    .skip(skip)
+    .populate('user')
+    .then(items=>res.json(items))
+    .catch(e=>next(e))
+});
+
 router.post('/', 
     verifyToken, 
     updates.single('image'),
@@ -40,7 +51,13 @@ router.post('/',
 router.get('/', 
     verifyToken, 
     (req,res)=>{
-        Post.find()
+        const query = {tipo:'PERSONAL'}
+        let skip = 0;
+        if(req.query.skip) skip = req.query.skip;
+        if(req.query.tipo) query.tipo = req.query.tipo;
+        Post.find(query)
+        limit(10)
+        .skip(skip)
         .populate('user')
         .sort('-created_at')
         .then(posts=>{

@@ -49,7 +49,8 @@ router.post('/login',
         if(!user) return res.status(500).send(info);
 
         //pido los posts
-        Post.find({user:user._id})
+        Post.find({user:user._id, tipo:"PERSONAL"})
+        .limit(10)
         .populate('user')
         .then(posts=>{
             user.posts = posts;

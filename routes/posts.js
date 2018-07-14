@@ -25,22 +25,23 @@ router.get('/own', verifyToken,(req,res,next)=>{
 
 router.post('/', 
     verifyToken, 
-    updates.single('image'),
+    updates.fields([
+        {name:'image', maxCount:1, require:false},
+        {name: 'file', maxCount:1, require:false}
+    ]),
     (req,res, next)=>{
 
-        //if(req.files.image) req.body.image = req.file.image.url;
-        if(req.file) req.body.image = req.file.url;
+        if(req.files.image) req.body.image = req.file.image.url;
+        if(req.files.file) req.body.file = req.files.file.url;
 
         //extra settings
         if(req.body.links) req.body.links = req.body.links.split(',');
         else delete req.body.links;
         req.body.user = req.user._id;
 
-
         Post.create(req.body)
         .then(post=>{
             return Post.findById(post._id).populate('user')
-            
         })
         .then(p=>{
             res.json(p);

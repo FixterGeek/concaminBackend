@@ -25,14 +25,15 @@ router.get('/own', verifyToken,(req,res,next)=>{
 
 router.post('/', 
     verifyToken, 
-    uploadCloud.fields([
-        {name:'image', maxCount:1, require:false},
-        {name: 'file', maxCount:1, require:false}
-    ]),
+    // uploadCloud.fields([
+    //     {name:'image', maxCount:1, require:false},
+    //     {name: 'file', maxCount:1, require:false}
+    // ]),
+    uploadCloud.single('image'),
     (req,res, next)=>{
 
         if(req.files.image) req.body.image = req.file.image.url;
-        if(req.files.file) req.body.file = req.files.file.url;
+        //if(req.files.file) req.body.file = req.files.file.url;
 
         //extra settings
         if(req.body.links) req.body.links = req.body.links.split(',');

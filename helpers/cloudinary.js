@@ -11,7 +11,7 @@ cloudinary.config({
 var storage = cloudinaryStorage({
   cloudinary: cloudinary,
   folder: 'concamin',
-  allowedFormats: ['jpg', 'png', 'pdf'],
+  allowedFormats: ['jpg', 'png', 'pdf', 'gif', 'jpeg'],
   filename: function (req, file, cb) {
     cb(null, file.originalname);
   }

@@ -50,6 +50,7 @@ router.post('/login',
 
         //pido los posts
         Post.find({user:user._id})
+        .populate('user')
         .then(posts=>{
             user.posts = posts;
             res.json({user:user,access_token:genToken(user)});

@@ -1,6 +1,8 @@
 const router = require('express').Router();
 const Post = require('../models/Post');
 const updates = require('../helpers/cloudinary');
+const verifyToken = require('../helpers/jwt').verifyToken;
+
 
 function isAuth(req,res,next){
     if(req.isAuthenticated()){
@@ -11,7 +13,7 @@ function isAuth(req,res,next){
 }
 
 router.post('/', 
-    isAuth, 
+    verifyToken, 
     updates.single('image'),
     (req,res, next)=>{
 
@@ -36,7 +38,7 @@ router.post('/',
 });
 
 router.get('/', 
-    isAuth, 
+    verifyToken, 
     (req,res)=>{
         Post.find()
         .populate('user')
@@ -48,7 +50,7 @@ router.get('/',
 })
 
 router.get('/:id', 
-    isAuth, 
+    verifyToken, 
     (req,res)=>{
         Post.findById(req.params.id)
         .then(post=>{
@@ -58,7 +60,7 @@ router.get('/:id',
 })
 
 router.patch('/:id', 
-    isAuth, 
+    verifyToken, 
     updates.single('image'),
     (req,res)=>{
         if(req.file) req.body.image = req.file.url;
@@ -70,7 +72,7 @@ router.patch('/:id',
 });
 
 router.delete('/:id', 
-    isAuth, 
+    verifyToken, 
     (req,res)=>{
         Post.findByIdAndRemove(req.params.id)
         .then(post=>{

@@ -50,10 +50,10 @@ router.post('/',
 
 router.get('/', 
     verifyToken, 
-    (req,res)=>{
+    (req,res,next)=>{
         const query = {tipo:'PERSONAL'}
         let skip = 0;
-        if(req.query.skip) skip = req.query.skip;
+        if(req.query.skip) skip = Number(req.query.skip);
         if(req.query.tipo) query.tipo = req.query.tipo;
         Post.find(query)
         .limit(10)

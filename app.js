@@ -10,6 +10,7 @@ const logger       = require('morgan');
 const path         = require('path');
 const passport     = require('./helpers/passport');
 const session      = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 
 
 mongoose.Promise = Promise;
@@ -30,12 +31,16 @@ app.use(require('cors')({
   origin:true
 }))
 
-app.use(session({
-    secret:"brendijs",
-    resave:true,
-    saveUninitialized:true,
-    cookie:{maxAge:456789, httpOnly:true}
-}));
+// app.use(session({
+//     store: new MongoStore({
+
+//       connect: mongoose.connection
+//     }),
+//     secret:"brendijs",
+//     resave:true,
+//     saveUninitialized:true,
+//     //cookie:{maxAge:456789, httpOnly:true}
+// }));
 
 app.use(passport.initialize());
 app.use(passport.session());

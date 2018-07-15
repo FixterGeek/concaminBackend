@@ -51,6 +51,9 @@ router.post('/',
             .then(post=>{
                 return Post.findById(post._id).populate('user')
             })
+            .then(p=>{
+                res.json(p);
+            })
             .catch(e=>next(e));
         }
 

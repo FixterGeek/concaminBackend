@@ -25,6 +25,7 @@ router.post('/',
         if(req.file) req.body.cover = req.file.url;
         //extra settings
         req.body.owner = req.user._id;
+        req.body.members = [];
         req.body.members.push(req.user._id)
         Group.create(req.body)
         .then(item=>{

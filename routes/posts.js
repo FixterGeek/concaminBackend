@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const Post = require('../models/Post');
+const Group = require('../models/Group');
 const uploadCloud = require('../helpers/cloudinary');
 const verifyToken = require('../helpers/jwt').verifyToken;
 
@@ -40,6 +41,19 @@ router.post('/',
         else delete req.body.links;
         req.body.user = req.user._id;
 
+        if(req.body.tipo === "GROUP"){
+            if(!req.body.group) return res.status(404).json({message:"No se encontró"});
+            Group.findOne({members:req.user._id})
+            .then(group=>{
+                if(!group) return res.status(403).json({message:"No tienes permiso"});
+                return Post.create(req.body)
+            })
+            .then(p=>{
+                res.json(p);
+            })
+            .catch(e=>next(e));
+        }
+
         Post.create(req.body)
         .then(post=>{
             return Post.findById(post._id).populate('user')
@@ -57,7 +71,6 @@ router.get('/',
         let skip = 0;
         if(req.query.skip) skip = Number(req.query.skip);
         if(req.query.tipo === "GROUP") {
-            console.log("PERRO", req.query);
             if(!req.query.group) return res.status(404).json({message: "No se encontró"})
             query.group = req.query.group;
             query.tipo = "GROUP";

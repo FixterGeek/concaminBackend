@@ -7,7 +7,7 @@ const verifyToken = require('../helpers/jwt').verifyToken;
 router.get('/own', verifyToken,(req,res,next)=>{
     let skip = 0;
     if(req.query.skip) skip = Number(req.query.skip);
-    Group.find({members:{$in:[req.user._id]}})
+    Group.find({owner:req.user._id})
     .limit(10)
     .skip(skip)
     .populate('members')

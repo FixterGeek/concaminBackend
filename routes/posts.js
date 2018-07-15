@@ -56,7 +56,13 @@ router.get('/',
         const query = {tipo:'PERSONAL'}
         let skip = 0;
         if(req.query.skip) skip = Number(req.query.skip);
-        if(req.query.tipo) query.tipo = req.query.tipo;
+        if(req.query.tipo === "GROUP") {
+            if(!req.query.group) return res.status(404).json({message: "No se encontró"})
+            query.group = req.query.group;
+            query.tipo = "GROUP";
+            query.members = req.user._id
+        }
+
         Post.find(query)
         .limit(10)
         .skip(skip)

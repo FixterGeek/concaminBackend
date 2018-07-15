@@ -1,7 +1,7 @@
 const nodemailer = require('nodemailer');
 
-const url = "http://localhost:3000/"
-const url2 = "https://localhost:3001/signup/?next=/main/groups/accept/"
+const url = "https://concamin.herokuapp.com/"
+const url2 = "https://concamin-c2a9c.firebaseapp.com/signup/?next=/main/groups/accept/"
 
 const transporter = nodemailer.createTransport({
     service: 'Gmail',

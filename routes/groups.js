@@ -65,7 +65,7 @@ router.post('/invite', verifyToken, (req,res,next)=>{
                     member: false
                 },'bliss',{expiresIn: "15d"});
                 //new Invite
-                sendInviteNonMember
+                sendInviteNonMember(token, email)
             }
             
         res.json({users, emails});

@@ -75,8 +75,24 @@ router.get('/',
         if(req.query.skip) skip = Number(req.query.skip);
         if(req.query.tipo === "GROUP") {
             if(!req.query.group) return res.status(404).json({message: "No se encontró"})
-            query.group = req.query.group;
-            query.tipo = "GROUP";
+            //checar si es miembro
+            Group.findOne({_id:req.query.group, members:req.user._id})
+            .then(group=>{
+                if(!group) return res.status(403).json({message:"No tienes permsiso"});
+                query.group = req.query.group;
+                query.tipo = "GROUP";
+                return Post.find(query)
+                .limit(10)
+                .skip(skip)
+                .populate('user')
+                .sort('-created_at')
+                .then(posts=>{
+                    return res.json(posts);
+                })
+                .catch(e=>next(e));
+            })
+            
+
             //query.members = req.user._id
         }
 

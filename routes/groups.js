@@ -5,6 +5,7 @@ const uploadCloud = require('../helpers/cloudinary');
 const verifyToken = require('../helpers/jwt').verifyToken;
 const jwt = require('jsonwebtoken');
 const sendInvite  = require('../helpers/mailer').sendInvite;
+const sendInviteNonMember = require('../helpers/mailer').sendInviteNonMember
 
 router.get('/invite/accept/:token', (req,res)=>{
     const url = "http://localhost:3001/main/profile"
@@ -53,6 +54,17 @@ router.post('/invite', verifyToken, (req,res,next)=>{
                 },'bliss',{expiresIn: "15d"});
                 //enviamos email 1x1
                 sendInvite(token, u.email)
+            }
+            for(let email of emails){                
+                const token = jwt.sign({
+                    //invited: u._id,
+                    email,
+                    group: req.body.groupId,
+                    owner: req.user._id,
+                    member: false
+                },'bliss',{expiresIn: "15d"});
+                //new Invite
+                sendInviteNonMember
             }
             
         res.json({users, emails});

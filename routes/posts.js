@@ -94,6 +94,7 @@ router.get('/',
             
 
             //query.members = req.user._id
+            return;
         }
 
         Post.find(query)

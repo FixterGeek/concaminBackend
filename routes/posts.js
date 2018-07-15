@@ -48,8 +48,8 @@ router.post('/',
                 if(!group) return res.status(403).json({message:"No tienes permiso"});
                 return Post.create(req.body)
             })
-            .then(p=>{
-                res.json(p);
+            .then(post=>{
+                return Post.findById(post._id).populate('user')
             })
             .catch(e=>next(e));
         }

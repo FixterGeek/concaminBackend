@@ -77,7 +77,7 @@ router.get('/',
             if(!req.query.group) return res.status(404).json({message: "No se encontró"})
             query.group = req.query.group;
             query.tipo = "GROUP";
-            query.members = req.user._id
+            //query.members = req.user._id
         }
 
         Post.find(query)

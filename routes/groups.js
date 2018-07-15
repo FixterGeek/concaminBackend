@@ -3,18 +3,58 @@ const Group = require('../models/Group');
 const User = require('../models/User');
 const uploadCloud = require('../helpers/cloudinary');
 const verifyToken = require('../helpers/jwt').verifyToken;
+const jwt = require('jsonwebtoken');
+const sendInvite  = require('../helpers/mailer').sendInvite;
 
+router.get('/invite/accept/:token', (req,res)=>{
+    const url = "http://localhost:3001/main/profile"
+    jwt.verify(req.params.token, 'bliss', function(err, unHashed) {
+        if (err) {
+            console.log(err)
+            return res.send("Tu Invitación expiró")
+        }
+        console.log('chet?')
+        //const unHashed = jwt.decode(req.params.token);
+        Group.findOne({_id:unHashed.group, members:{$ne:unHashed.invited}})
+        .populate('owner')
+        .then(group=>{
+                if(!group) return res.send('Ya eres parte de este grupo')
+                group.members.push(unHashed.invited);
+                return group.save()
+        })
+        .then(group=>{
+            res.send(`
+            <h1>Felicidades, ${group.owner.username} te ha hecho miembro!</h1>
+            <h2>Ahora eres parte del grupo ${group.name}</h2>
+            <h3>Revisa tu perfil! <a href=${url}>Ir</a><h3>
+            `)
+        })
+        .catch(e=>res.send("Algo falló, intentalo de nuevo"))
+    });
+
+
+});
 
 router.post('/invite', verifyToken, (req,res,next)=>{
     //check si el invitado es miembro
     const emails = req.body.emails;
     User.find({email:{$in:emails}})
     .then(users=>{
-        users.forEach(u=>{
-            emails = emails.filter(e=>{
-                u.email !== e
-            })
-        })
+            for(let u of users){
+                if(emails.indexOf(u.email) !== -1){
+                    emails.splice(emails.indexOf(u.email),1);
+                }
+                //gen token
+                const token = jwt.sign({
+                    invited: u._id,
+                    group: req.body.groupId,
+                    owner: req.user._id,
+                    member: true
+                },'bliss',{expiresIn: "15d"});
+                //enviamos email 1x1
+                sendInvite(token, u.email)
+            }
+            
         res.json({users, emails});
     })
     .catch(e=>{})

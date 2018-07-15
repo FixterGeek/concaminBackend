@@ -8,7 +8,7 @@ const verifyToken = require('../helpers/jwt').verifyToken;
 router.post('/invite', verifyToken, (req,res,next)=>{
     //check si el invitado es miembro
     const emails = req.body.emails;
-    User.find({email:{$in:[req.body.emails]}})
+    User.find({email:{$in:emails}})
     .then(users=>{
         users.forEach(u=>{
             emails = emails.filter(e=>{

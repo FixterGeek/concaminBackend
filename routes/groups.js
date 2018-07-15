@@ -63,10 +63,12 @@ router.get('/',
 router.get('/:id', 
     verifyToken, 
     (req,res)=>{
-        Group.findById(req.params.id)
+        const query = {_id:req.params.id, members:req.user._id}
+        Group.findOne(query)
         .populate('members')
         .populate('owner')
         .then(item=>{
+            if(!item) return res.status(403).json({message:"No tienes permiso"});
             res.json(item);
         })
         .catch(e=>next(e));

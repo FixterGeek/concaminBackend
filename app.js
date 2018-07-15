@@ -82,6 +82,8 @@ const posts = require('./routes/posts');
 app.use('/posts', posts);
 const chats = require('./routes/chats');
 app.use('/chats', chats);
+const groups = require('./routes/groups');
+app.use('/groups', groups);
 
 
 module.exports = app;

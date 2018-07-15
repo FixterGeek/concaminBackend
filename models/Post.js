@@ -2,6 +2,14 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const postSchema = new Schema({
+    group:{
+        type: Schema.Types.ObjectId,
+        ref: 'Group'
+    },
+    event:{
+        type: Schema.Types.ObjectId,
+        ref: 'Event'
+    },
     tipo:{
         type:String,
         enum:["GROUP", "EVENT", "PERSONAL", "INSTITUTION"],

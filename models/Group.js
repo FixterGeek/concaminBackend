@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const groupSchema = new Schema({
+    owner:{
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    },
     members:[{
         type:Schema.Types.ObjectId,
         ref:'User'
@@ -10,6 +14,7 @@ const groupSchema = new Schema({
         type:String,
         required:true
     },
+    subject:String,
     description:{
         type:String
     },
@@ -18,7 +23,11 @@ const groupSchema = new Schema({
     posts:[{
         type:Schema.Types.ObjectId,
         ref:'Post'
-    }]
+    }],
+    revision:{
+        type: Boolean,
+        default: true
+    }
 
 },{
     timestamps:{

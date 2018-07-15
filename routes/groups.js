@@ -1,8 +1,26 @@
 const router = require('express').Router();
 const Group = require('../models/Group');
+const User = require('../models/User');
 const uploadCloud = require('../helpers/cloudinary');
 const verifyToken = require('../helpers/jwt').verifyToken;
 
+
+router.post('/invite', verifyToken, (req,res,next)=>{
+    //check si el invitado es miembro
+    const emails = req.body.emails;
+    User.find({email:{$in:[req.body.emails]}})
+    .then(users=>{
+        users.forEach(u=>{
+            emails = emails.filter(e=>{
+                u.email !== e
+            })
+        })
+        res.json({users, emails});
+    })
+    .catch()
+    //en caso de que no
+    const 
+})
 
 router.get('/own', verifyToken,(req,res,next)=>{
     let skip = 0;

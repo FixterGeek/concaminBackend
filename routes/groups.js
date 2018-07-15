@@ -17,9 +17,8 @@ router.post('/invite', verifyToken, (req,res,next)=>{
         })
         res.json({users, emails});
     })
-    .catch()
-    //en caso de que no
-    const 
+    .catch(e=>{})
+    //en caso de que no 
 })
 
 router.get('/own', verifyToken,(req,res,next)=>{

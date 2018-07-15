@@ -7,7 +7,8 @@ const jwt = require('jsonwebtoken');
 const sendInvite  = require('../helpers/mailer').sendInvite;
 
 router.get('/invite/accept/:token', (req,res)=>{
-    const url = "http://localhost:3001/main/profile"
+    //const url = "http://localhost:3001/main/profile"
+    const url = "https://concamin-c2a9c.firebaseapp.com/main/profile"
     jwt.verify(req.params.token, 'bliss', function(err, unHashed) {
         if (err) {
             console.log(err)

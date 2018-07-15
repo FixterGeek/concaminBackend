@@ -57,6 +57,7 @@ router.get('/',
         let skip = 0;
         if(req.query.skip) skip = Number(req.query.skip);
         if(req.query.tipo === "GROUP") {
+            console.log("PERRO", req.query);
             if(!req.query.group) return res.status(404).json({message: "No se encontró"})
             query.group = req.query.group;
             query.tipo = "GROUP";

@@ -5,6 +5,38 @@ const uploadCloud = require('../helpers/cloudinary');
 const verifyToken = require('../helpers/jwt').verifyToken;
 const jwt = require('jsonwebtoken');
 const sendInvite  = require('../helpers/mailer').sendInvite;
+const sendInviteNonMember = require('../helpers/mailer').sendInviteNonMember
+
+
+
+router.post('/invite/accept/:token', (req, res)=>{
+    //const url = "http://localhost:3001/main/profile"
+    const url = "https://concamin-c2a9c.firebaseapp.com/main/profile"
+    jwt.verify(req.params.token, 'bliss', function(err, unHashed) {
+        if (err) {
+            console.log(err)
+            return res.status(403).json({message:'Token expirado'})
+        }
+        console.log('chet?')
+        //const unHashed = jwt.decode(req.params.token);
+        Group.findOne({_id:unHashed.group, members:{$ne:req.body.userId}})
+        .populate('owner')
+        .then(group=>{
+                if(!group) return res.status(200).json({message:'Ya eres parte de este grupo', group})
+                group.members.push(req.body.userId);
+                return group.save()
+        })
+        .then(group=>{
+            return res.status(200).json({message:'Ya eres parte de este grupo', group})
+            // res.send(`
+            // <h1>Felicidades, ${group.owner.username} te ha hecho miembro!</h1>
+            // <h2>Ahora eres parte del grupo ${group.name}</h2>
+            // <h3>Revisa tu perfil! <a href=${url}>Ir</a><h3>
+            // `)
+        })
+        .catch(e=>res.status(500).json({message:"Algo falló, intentalo de nuevo"}))
+    });
+})
 
 router.get('/invite/accept/:token', (req,res)=>{
     //const url = "http://localhost:3001/main/profile"
@@ -54,6 +86,17 @@ router.post('/invite', verifyToken, (req,res,next)=>{
                 },'bliss',{expiresIn: "15d"});
                 //enviamos email 1x1
                 sendInvite(token, u.email)
+            }
+            for(let email of emails){                
+                const token = jwt.sign({
+                    //invited: u._id,
+                    email,
+                    group: req.body.groupId,
+                    owner: req.user._id,
+                    member: false
+                },'bliss',{expiresIn: "15d"});
+                //new Invite
+                sendInviteNonMember(token, email)
             }
             
         res.json({users, emails});

@@ -44,7 +44,11 @@ const userSchema = new Schema({
         type:Schema.Types.ObjectId,
         ref:'Institution'
     },
-    bio:String
+    bio:String,
+    active:{
+        type:Boolean,
+        default:true
+    }
 
 },{
     timestamps:{

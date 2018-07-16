@@ -45,7 +45,7 @@ router.post('/',
             if(!req.body.group) return res.status(404).json({message:"No se encontró"});
             Group.findOne({members:req.user._id})
             .then(group=>{
-                if(!group || group.owner !== req.user._id ) return res.status(403).json({message:"No tienes permiso"});
+                if(!group || group._id != req.body.group) return res.status(403).json({message:"No tienes permiso"});
                 return Post.create(req.body)
             })
             .then(post=>{

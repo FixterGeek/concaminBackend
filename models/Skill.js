@@ -16,12 +16,19 @@ const skillSchema = new Schema({
         type:String,
         required:true
     },
-    body:{
+    university:{
         type:String,
         required:true
     },
+    position:String,
+    company: String,
+    from:{
+        type: Date
+    },
+    to:{
+        type: Date
+    },
     picture:String,
-    date:Date,
     links:[String]
 
 },{

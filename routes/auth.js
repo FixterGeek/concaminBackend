@@ -49,11 +49,11 @@ router.post('/login',
         if(!user) return res.status(500).send(info);
 
         //pido los posts
-        Post.find({user:user._id, tipo:"PERSONAL"})
-        .limit(10)
+        Skill.find({user:user._id})
+        //.limit(10)
         .populate('user')
-        .then(posts=>{
-            user.posts = posts;
+        .then(skills=>{
+            user.skills = skills;
             res.json({user:user,access_token:genToken(user)});
         })
         .catch(err=>{

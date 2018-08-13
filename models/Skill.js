@@ -17,8 +17,7 @@ const skillSchema = new Schema({
         required:true
     },
     university:{
-        type:String,
-        required:true
+        type:String
     },
     position:String,
     company: String,

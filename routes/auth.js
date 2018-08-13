@@ -19,6 +19,7 @@ function isAuth(req,res,next){
 router.post('/skills', 
 verifyToken,
 (req,res, next)=>{
+    console.log(req.body)
     req.body.user = req.user._id
     Skill.create(req.body)
     .then(skill=>{

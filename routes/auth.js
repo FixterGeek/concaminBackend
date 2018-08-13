@@ -47,7 +47,7 @@ router.post('/login',
     passport.authenticate('local', (err, user, info)=>{
         console.log(err)
         if(err) return res.status(500).send(err);
-        if(!user) return res.status(500).send(info);
+        if(!user) return res.status(404).send(info);
 
         //pido los posts
         Skill.find({user:user._id})

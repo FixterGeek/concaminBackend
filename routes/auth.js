@@ -16,6 +16,20 @@ function isAuth(req,res,next){
     }
 }
 
+router.post('/skills', verifyToken,
+(req,res)=>{
+    req.body.user = req.user._id
+    Skill.create(req.body)
+    .then(skill=>{
+        res.status(201).json(skill)
+    })
+    .catch(e=>{
+        next(e)
+    })
+}
+)
+
+
 router.get('/skills/:id', verifyToken,
 (req,res)=>{
     Skill.find({user:req.user._id})

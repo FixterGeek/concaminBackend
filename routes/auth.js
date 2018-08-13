@@ -4,6 +4,7 @@ const Skill = require('../models/Skill');
 const passport = require('passport');
 const uploads = require('../helpers/cloudinary');
 const genToken = require('../helpers/jwt').genToken;
+const verifyToken = require('../helpers/jwt').verifyToken;
 
 
 
@@ -69,7 +70,7 @@ router.get('/logout', (req,res)=>{
 })
 
 router.post('/profile', 
-isAuth, 
+verifyToken, 
 uploads.fields([{name:"profilePic", maxCount:1}, {name:"cover", maxCount:1}]),
 (req,res, next)=>{
     console.log(req.body)

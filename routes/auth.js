@@ -57,6 +57,7 @@ router.post('/login',
             res.json({user:user,access_token:genToken(user)});
         })
         .catch(err=>{
+            console.log(err)
             res.json({user:user,access_token:genToken(user)});
         })
         

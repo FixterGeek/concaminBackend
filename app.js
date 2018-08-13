@@ -84,6 +84,8 @@ const chats = require('./routes/chats');
 app.use('/chats', chats);
 const groups = require('./routes/groups');
 app.use('/groups', groups);
+const comments = require('./routes/comments');
+app.use('/comments', comments)
 
 
 module.exports = app;

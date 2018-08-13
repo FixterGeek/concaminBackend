@@ -10,6 +10,11 @@ const commentSchema = new Schema({
     body:{
         type:String,
         required:true
+    },
+    post:{
+        type:Schema.Types.ObjectId,
+        ref:'Post',
+        required:true
     }
 
 },{

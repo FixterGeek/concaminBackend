@@ -70,7 +70,7 @@ router.post('/',
 });
 
 router.get('/', 
-    verifyToken, 
+    verifyToken,
     (req,res,next)=>{
         const query = {tipo:'PERSONAL'}
         let skip = 0;

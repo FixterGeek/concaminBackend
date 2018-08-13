@@ -16,6 +16,18 @@ function isAuth(req,res,next){
     }
 }
 
+router.get('/skills/:id', verifyToken,
+(req,res)=>{
+    Skill.find({user:req.user._id})
+    .then(skills=>{
+        res.status(200).json(skills)
+    })
+    .catch(e=>{
+        next(e)
+    })
+}
+)
+
 router.get('/users/:id', isAuth, (req,res)=>{
     const promise = Promise.all([User.findById(req.user._id), User.findById(req.params.id)]);
     promise

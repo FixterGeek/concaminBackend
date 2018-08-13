@@ -86,7 +86,9 @@ uploads.fields([{name:"profilePic", maxCount:1}, {name:"cover", maxCount:1}]),
     }
 
     User.findByIdAndUpdate(req.user._id, req.body, {new:true})
-    .then(user=>res.json(user))
+    .then(user=>{
+        res.json({user:user,access_token:genToken(user)});
+    })
     .catch(e=>next(e));
 });
 

@@ -50,6 +50,7 @@ verifyToken,
 
 router.get('/skills/:id', verifyToken,
 (req,res)=>{
+    //the userID is comming in the params but not using it yet
     Skill.find({user:req.user._id})
     .then(skills=>{
         res.status(200).json(skills)

@@ -13,8 +13,7 @@ const skillSchema = new Schema({
         required:true
     },
     title:{
-        type:String,
-        required:true
+        type:String
     },
     university:{
         type:String

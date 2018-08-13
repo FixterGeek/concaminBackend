@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const User = require('../models/User');
-const Post = require('../models/Post');
+const Skill = require('../models/Skill');
 const passport = require('passport');
 const uploads = require('../helpers/cloudinary');
 const genToken = require('../helpers/jwt').genToken;

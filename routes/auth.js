@@ -16,7 +16,8 @@ function isAuth(req,res,next){
     }
 }
 
-router.post('/skills', verifyToken,
+router.post('/skills', 
+verifyToken,
 (req,res)=>{
     req.body.user = req.user._id
     Skill.create(req.body)

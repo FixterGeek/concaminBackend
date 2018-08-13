@@ -50,16 +50,16 @@ router.post('/login',
         if(!user) return res.status(404).send(info);
 
         //pido los posts
-        Skill.find({user:user._id})
+        //Skill.find({user:user._id})
         //.limit(10)
-        .populate('user')
-        .then(skills=>{
-            user.skills = skills;
+        //.populate('user')
+        //.then(skills=>{
+          //  user.skills = skills;
             res.json({user:user,access_token:genToken(user)});
-        })
-        .catch(err=>{
-            res.json({user:user,access_token:genToken(user)});
-        })
+        //})
+        //.catch(err=>{
+          //  res.json({user:user,access_token:genToken(user)});
+       // })
         
     })(req, res, next);
 });

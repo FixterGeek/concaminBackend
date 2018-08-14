@@ -44,7 +44,10 @@ const userSchema = new Schema({
         type:Schema.Types.ObjectId,
         ref:'Institution'
     },
-    bio:String,
+    bio:{
+        type: String,
+        default: "Profesional desde siempre, con grandes ambiciones..."
+    },
     active:{
         type:Boolean,
         default:true

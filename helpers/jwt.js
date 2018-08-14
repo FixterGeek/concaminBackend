@@ -7,25 +7,31 @@ exports.verifyToken  = (req, res, next) => {
     // check header or url parameters or post parameters for token
     //console.log(req.headers);
     var token = req.body.token || req.query.token || req.headers['x-access-token'] || req.headers['authorization'];
-  
+
     // decode token
     if (token) {
-  
+
       // verifies secret and checks exp
-      jwt.verify(token, process.env.TOKEN_GENERATOR, function(err, decoded) {      
+      jwt.verify(token, process.env.TOKEN_GENERATOR, function(err, decoded) {
+
         if (err) {
+
           return res.status(500).json({ success: false, message: 'Failed to authenticate token.' });    
         } else {
           // if everything is good, save to request for use in other routes
           req.decoded = decoded;
           //save the user into req:
-          //console.log(decoded);
+
           User.findById(decoded.sub)
           .then(user=>{
+              console.log('si pasó')
               req.user = user;
               next();
           })
-          .catch(e=>next());
+          .catch(e=>{
+              console.log(e)
+              next()
+          });
           
         }
       });

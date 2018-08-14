@@ -15,7 +15,8 @@ const MongoStore = require('connect-mongo')(session);
 
 mongoose.Promise = Promise;
 mongoose
-  .connect('mongodb://brendijs:brendijs@ds129670.mlab.com:29670/concamin', {useMongoClient: true})
+  //.connect('mongodb://brendijs:brendijs@ds129670.mlab.com:29670/concamin', {useMongoClient: true})
+  .connect('mongodb://bliss:bliss@cluster0-shard-00-00-u2eux.mongodb.net:27017,cluster0-shard-00-01-u2eux.mongodb.net:27017,cluster0-shard-00-02-u2eux.mongodb.net:27017/concamin?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true', {useMongoClient: true})
   .then(() => {
     console.log('Connected to Mongo!')
   }).catch(err => {

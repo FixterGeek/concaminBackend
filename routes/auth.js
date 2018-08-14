@@ -1,9 +1,10 @@
 const router = require('express').Router();
 const User = require('../models/User');
-const Post = require('../models/Post');
+const Skill = require('../models/Skill');
 const passport = require('passport');
 const uploads = require('../helpers/cloudinary');
 const genToken = require('../helpers/jwt').genToken;
+const verifyToken = require('../helpers/jwt').verifyToken;
 
 
 
@@ -14,6 +15,34 @@ function isAuth(req,res,next){
         res.status(403).json({message:"inicia sesión primero"})
     }
 }
+
+router.post('/skills', 
+verifyToken,
+(req,res, next)=>{
+    console.log(req.body)
+    req.body.user = req.user._id
+    Skill.create(req.body)
+    .then(skill=>{
+        res.status(201).json(skill)
+    })
+    .catch(e=>{
+        next(e)
+    })
+}
+)
+
+
+router.get('/skills/:id', verifyToken,
+(req,res)=>{
+    Skill.find({user:req.user._id})
+    .then(skills=>{
+        res.status(200).json(skills)
+    })
+    .catch(e=>{
+        next(e)
+    })
+}
+)
 
 router.get('/users/:id', isAuth, (req,res)=>{
     const promise = Promise.all([User.findById(req.user._id), User.findById(req.params.id)]);
@@ -42,27 +71,39 @@ router.post('/signup', (req,res)=>{
 
 router.post('/login',
 // passport.authenticate('local'), 
-(req,res,next)=>{
-    passport.authenticate('local', (err, user, info)=>{
+(req,res,next)=> {
+    passport.authenticate('local', (err, user, info) => {
         console.log(err)
-        if(err) return res.status(500).send(err);
-        if(!user) return res.status(500).send(info);
+        if (err) return res.status(500).send(err);
+        if (!user) return res.status(404).send(info);
 
         //pido los posts
-        Post.find({user:user._id, tipo:"PERSONAL"})
-        .limit(10)
-        .populate('user')
-        .then(posts=>{
-            user.posts = posts;
-            res.json({user:user,access_token:genToken(user)});
-        })
-        .catch(err=>{
-            console.log(err)
-            res.json({user:user,access_token:genToken(user)});
-        })
-        
-    })(req, res, next);
-});
+
+        Post.find({user: user._id, tipo: "PERSONAL"})
+            .limit(10)
+            .populate('user')
+            .then(posts => {
+                user.posts = posts;
+                res.json({user: user, access_token: genToken(user)});
+            })
+            .catch(err => {
+                console.log(err)
+
+                //Skill.find({user:user._id})
+                //.limit(10)
+                //.populate('user')
+                //.then(skills=>{
+                //  user.skills = skills;
+
+                res.json({user: user, access_token: genToken(user)});
+                //})
+                //.catch(err=>{
+                //  res.json({user:user,access_token:genToken(user)});
+                // })
+
+            })(req, res, next);
+    })
+})
 
 router.get('/logout', (req,res)=>{
     req.logout();
@@ -70,7 +111,7 @@ router.get('/logout', (req,res)=>{
 })
 
 router.post('/profile', 
-isAuth, 
+verifyToken, 
 uploads.fields([{name:"profilePic", maxCount:1}, {name:"cover", maxCount:1}]),
 (req,res, next)=>{
     console.log(req.body)
@@ -86,7 +127,9 @@ uploads.fields([{name:"profilePic", maxCount:1}, {name:"cover", maxCount:1}]),
     }
 
     User.findByIdAndUpdate(req.user._id, req.body, {new:true})
-    .then(user=>res.json(user))
+    .then(user=>{
+        res.json(user);
+    })
     .catch(e=>next(e));
 });
 

@@ -16,6 +16,22 @@ function isAuth(req,res,next){
     }
 }
 
+router.delete('/skills/:id', 
+verifyToken,
+(req,res, next)=>{
+    const id = req.params.id
+    req.body.user = req.user._id
+    Skill.findOneAndRemove({user:req.user._id, _id:id })
+    .then(skill=>{
+        if(!skill) return res.status(404).json({message:"no se encotró"})
+        res.status(201).json(skill)
+    })
+    .catch(e=>{
+        next(e)
+    })
+}
+)
+
 router.post('/skills', 
 verifyToken,
 (req,res, next)=>{
@@ -34,6 +50,7 @@ verifyToken,
 
 router.get('/skills/:id', verifyToken,
 (req,res)=>{
+    //the userID is comming in the params but not using it yet
     Skill.find({user:req.user._id})
     .then(skills=>{
         res.status(200).json(skills)

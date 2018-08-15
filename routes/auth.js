@@ -96,15 +96,15 @@ router.post('/login',
 
         //pido los posts
 
-        Post.find({user: user._id, tipo: "PERSONAL"})
-            .limit(10)
-            .populate('user')
-            .then(posts => {
-                user.posts = posts;
-                res.json({user: user, access_token: genToken(user)});
-            })
-            .catch(err => {
-                console.log(err)
+        // Post.find({user: user._id, tipo: "PERSONAL"})
+        //     .limit(10)
+        //     .populate('user')
+        //     .then(posts => {
+        //         user.posts = posts;
+                //res.json({user: user, access_token: genToken(user)});
+            // // })
+            // .catch(err => {
+            //     console.log(err)
 
                 //Skill.find({user:user._id})
                 //.limit(10)
@@ -119,7 +119,7 @@ router.post('/login',
                 // })
 
             })(req, res, next);
-    })
+    // })
 })
 
 router.get('/logout', (req,res)=>{

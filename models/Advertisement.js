@@ -5,7 +5,11 @@ const advertisementSchema = new Schema({
     title:String,
     body:String,
     image:String,
-    link:String
+    link:String,
+    toPublish:{
+        type:Boolean,
+        default:false
+    }
 },{
     timestamps:{
         createdAt:'created_at',

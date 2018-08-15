@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const mongoose = require('mongoose');
 const Post = require('../models/Post');
 const Group = require('../models/Group');
 const uploadCloud = require('../helpers/cloudinary');
@@ -121,16 +122,34 @@ router.get('/:id',
 })
 
 router.patch('/like', (req, res, next)=>{
-    console.log(req.body)
-
-    Post.findByIdAndUpdate(req.body._id, {$push:{likes:req.body.user}})
+    Post.findOne({_id:req.body._id, likes:{$in:[req.body.user]}})
         .then(r=>{
-            console.log(r, 'liked')
-            res.json(r)
+            console.log(r)
+            if(r===null){
+                Post.findByIdAndUpdate(req.body._id, {$push:{likes:req.body.user}}, {new:true})
+                    .then(r=>{
+                        console.log(r, 'liked')
+                        res.json(r)
+                    }).catch(e=>{
+                    console.log(e)
+                    next(e)
+                })
+            }else{
+                Post.findByIdAndUpdate(req.body._id, {$pull:{likes:req.body.user}}, {new:true})
+                    .then(r=>{
+                        console.log(r, 'liked')
+                        res.json(r)
+                    }).catch(e=>{
+                    console.log(e)
+                    next(e)
+                })
+            }
+
         }).catch(e=>{
-            console.log(e)
-            next(e)
+
     })
+
+
 
 })
 

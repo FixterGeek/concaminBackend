@@ -112,7 +112,7 @@ router.get('/',
 
 router.get('/:id', 
     verifyToken, 
-    (req,res)=>{
+    (req,res, next)=>{
         Post.findById(req.params.id)
         .then(post=>{
             res.json(post);
@@ -120,10 +120,24 @@ router.get('/:id',
         .catch(e=>next(e));
 })
 
+router.patch('/like', (req, res, next)=>{
+    console.log(req.body)
+
+    Post.findByIdAndUpdate(req.body._id, {$push:{likes:req.body.user}})
+        .then(r=>{
+            console.log(r, 'liked')
+            res.json(r)
+        }).catch(e=>{
+            console.log(e)
+            next(e)
+    })
+
+})
+
 router.patch('/:id', 
     verifyToken, 
     uploadCloud.single('image'),
-    (req,res)=>{
+    (req,res, next)=>{
         if(req.file) req.body.image = req.file.url;
         Post.findByIdAndUpdate(req.params.id, req.body, {new:true})
         .then(post=>{
@@ -141,6 +155,8 @@ router.delete('/:id',
         })
         .catch(e=>next(e));
 });
+
+
 
 
 

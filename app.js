@@ -87,6 +87,8 @@ const groups = require('./routes/groups');
 app.use('/groups', groups);
 const comments = require('./routes/comments');
 app.use('/comments', comments)
+const advertisements = require('./routes/advertisement')
+app.use('/advertisements', advertisements)
 
 
 module.exports = app;

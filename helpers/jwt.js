@@ -24,7 +24,7 @@ exports.verifyToken  = (req, res, next) => {
 
           User.findById(decoded.sub)
           .then(user=>{
-              console.log('si pasó')
+
               req.user = user;
               next();
           })

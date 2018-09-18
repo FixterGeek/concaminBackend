@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const mongoose = require('mongoose');
 const Post = require('../models/Post');
 const Group = require('../models/Group');
 const uploadCloud = require('../helpers/cloudinary');
@@ -112,7 +113,7 @@ router.get('/',
 
 router.get('/:id', 
     verifyToken, 
-    (req,res)=>{
+    (req,res, next)=>{
         Post.findById(req.params.id)
         .then(post=>{
             res.json(post);
@@ -120,10 +121,42 @@ router.get('/:id',
         .catch(e=>next(e));
 })
 
+router.patch('/like', (req, res, next)=>{
+    Post.findOne({_id:req.body._id, likes:{$in:[req.body.user]}})
+        .then(r=>{
+            console.log(r)
+            if(r===null){
+                Post.findByIdAndUpdate(req.body._id, {$push:{likes:req.body.user}}, {new:true})
+                    .then(r=>{
+                        console.log(r, 'liked')
+                        res.json(r)
+                    }).catch(e=>{
+                    console.log(e)
+                    next(e)
+                })
+            }else{
+                Post.findByIdAndUpdate(req.body._id, {$pull:{likes:req.body.user}}, {new:true})
+                    .then(r=>{
+                        console.log(r, 'liked')
+                        res.json(r)
+                    }).catch(e=>{
+                    console.log(e)
+                    next(e)
+                })
+            }
+
+        }).catch(e=>{
+
+    })
+
+
+
+})
+
 router.patch('/:id', 
     verifyToken, 
     uploadCloud.single('image'),
-    (req,res)=>{
+    (req,res, next)=>{
         if(req.file) req.body.image = req.file.url;
         Post.findByIdAndUpdate(req.params.id, req.body, {new:true})
         .then(post=>{
@@ -141,6 +174,8 @@ router.delete('/:id',
         })
         .catch(e=>next(e));
 });
+
+
 
 
 

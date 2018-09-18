@@ -49,11 +49,12 @@ router.get('/invite/accept/:token', (req,res)=>{
             console.log(err)
             return res.send("Tu Invitación expiró")
         }
-        console.log('chet?')
+        console.log('chet?', unHashed)
         //const unHashed = jwt.decode(req.params.token);
         Group.findOne({_id:unHashed.group, members:{$ne:unHashed.invited}})
         .populate('owner')
         .then(group=>{
+            console.log("grupito: ", group)
                 if(!group) return res.send('Ya eres parte de este grupo')
                 group.members.push(unHashed.invited);
                 return group.save()
@@ -65,7 +66,10 @@ router.get('/invite/accept/:token', (req,res)=>{
             <h3>Revisa tu perfil! <a href=${url}>Ir</a><h3>
             `)
         })
-        .catch(e=>res.send("Algo falló, intentalo de nuevo"))
+        .catch(e=>{
+            console.log("error ", e)
+            res.send("Algo falló, intentalo de nuevo")
+        })
     });
 
 

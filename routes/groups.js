@@ -11,7 +11,7 @@ const sendInviteNonMember = require('../helpers/mailer').sendInviteNonMember
 
 router.post('/invite/accept/:token', (req, res)=>{
     //const url = "http://localhost:3001/main/profile"
-    const url = "https://concamin-c2a9c.firebaseapp.com/main/profile"
+    //const url = "https://concamin-c2a9c.firebaseapp.com/main/profile"
     jwt.verify(req.params.token, 'bliss', function(err, unHashed) {
         if (err) {
             console.log(err)
@@ -34,7 +34,10 @@ router.post('/invite/accept/:token', (req, res)=>{
             // <h3>Revisa tu perfil! <a href=${url}>Ir</a><h3>
             // `)
         })
-        .catch(e=>res.status(500).json({message:"Algo falló, intentalo de nuevo"}))
+        .catch(e=>{
+            console.log(e)
+            res.status(500).json({message:"Algo falló, intentalo de nuevo"})
+        })
     });
 })
 

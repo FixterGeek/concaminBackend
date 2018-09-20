@@ -68,15 +68,17 @@ router.get('/',
         .catch(e=>next(e));
 })
 
+//obtener evento en particular
 router.get('/:id', 
     verifyToken, 
     (req,res)=>{
-        const query = {_id:req.params.id, members:req.user._id}
-        Group.findOne(query)
-        .populate('members')
+        // const query = {_id:req.params.id}
+        Event.findById(req.params.id)
+        .populate('posts')
         .populate('owner')
+        .populate('participants')
         .then(item=>{
-            if(!item) return res.status(403).json({message:"No tienes permiso"});
+            if(!item) return res.status(404).json({message:"No se encontró"});
             res.json(item);
         })
         .catch(e=>next(e));

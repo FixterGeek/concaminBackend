@@ -94,10 +94,12 @@ router.patch('/:id',
         .catch(e=>next(e));
 });
 
+
+//Borrar evento
 router.delete('/:id', 
     verifyToken, 
     (req,res)=>{
-        Group.findByIdAndRemove(req.params.id)
+        Event.findByIdAndRemove(req.params.id)
         .then(item=>{
             res.json(item);
         })

@@ -84,6 +84,8 @@ const comments = require('./routes/comments');
 app.use('/comments', comments)
 const advertisements = require('./routes/advertisement')
 app.use('/advertisements', advertisements)
+const events = require('./routes/events')
+app.use('/events', events)
 
 
 module.exports = app;

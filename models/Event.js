@@ -21,6 +21,9 @@ const eventSchema = new Schema({
     description:{
         type:String
     },
+    location:{
+        type:String
+    },
     cover:String,
     image:String,
     posts:[{

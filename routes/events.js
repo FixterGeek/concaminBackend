@@ -55,10 +55,11 @@ router.get('/',
         const query = {}
         let skip = 0;
         if(req.query.skip) skip = Number(req.query.skip);
-        Group.find(query)
+        Event.find(query)
         .limit(10)
         .skip(skip)
-        .populate('members')
+        .populate('participants')
+        .populate('posts')
         .populate('owner')
         .sort('-created_at')
         .then(items=>{

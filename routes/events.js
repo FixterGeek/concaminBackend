@@ -121,13 +121,18 @@ router.post('/:id/assist',
                     .populate('posts')
                     .populate('owner')
                     .populate('participants')
-                    return res.status(200).json(event)
+                    .then(event=>{
+                        return res.status(200).json(event)
+                    })
+                    
             }
             Event.findByIdAndUpdate(req.params.id, {$pull:{participants:req.user._id}})
                 .populate('posts')
                 .populate('owner')
                 .populate('participants')
-                return res.status(200).json(event)
+                .then(event=>{
+                    return res.status(200).json(event)
+                })
             
         })
         .catch(e=>next(e))

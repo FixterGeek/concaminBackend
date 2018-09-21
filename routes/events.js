@@ -108,6 +108,16 @@ router.delete('/:id',
         .catch(e=>next(e));
 });
 
+//asistir al evento
+router.post('/:id/assist', 
+    verifyToken,
+    (req,res)=>{
+        Event.findByIdAndUpdate(req.params.id, {$push:{participants:req.user._id}})
+        .then(event=>res.status(200).json(event))
+        .catch(e=>next(e))
+    }
+)
+
 
 
 module.exports = router;

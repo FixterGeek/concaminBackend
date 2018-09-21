@@ -113,6 +113,9 @@ router.post('/:id/assist',
     verifyToken,
     (req,res)=>{
         Event.findByIdAndUpdate(req.params.id, {$push:{participants:req.user._id}})
+        .populate('posts')
+        .populate('owner')
+        .populate('participants')
         .then(event=>res.status(200).json(event))
         .catch(e=>next(e))
     }

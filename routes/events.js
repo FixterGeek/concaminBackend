@@ -112,11 +112,24 @@ router.delete('/:id',
 router.post('/:id/assist', 
     verifyToken,
     (req,res)=>{
-        Event.findByIdAndUpdate(req.params.id, {$push:{participants:req.user._id}})
-        .populate('posts')
-        .populate('owner')
-        .populate('participants')
-        .then(event=>res.status(200).json(event))
+        //si ya existe hay que sacarlo
+        //Event.findByIdAndUpdate(req.params.id, {$addToSet:{participants:req.user._id}})
+        Event.findOne({_id:req.params.id, participants:req.user._id})
+        .then(event=>{
+            if(!event){
+                Event.findByIdAndUpdate(req.params.id, {$addToSet:{participants:req.user._id}})
+                    .populate('posts')
+                    .populate('owner')
+                    .populate('participants')
+                    return res.status(200).json(event)
+            }
+            Event.findByIdAndUpdate(req.params.id, {$pull:{participants:req.user._id}})
+                .populate('posts')
+                .populate('owner')
+                .populate('participants')
+                return res.status(200).json(event)
+            
+        })
         .catch(e=>next(e))
     }
 )

@@ -117,7 +117,7 @@ router.post('/:id/assist',
         Event.findOne({_id:req.params.id, participants:req.user._id})
         .then(event=>{
             if(!event){
-                Event.findByIdAndUpdate(req.params.id, {$addToSet:{participants:req.user._id}})
+                Event.findByIdAndUpdate(req.params.id, {$addToSet:{participants:req.user._id}}, {new:true})
                     .populate('posts')
                     .populate('owner')
                     .populate('participants')
@@ -126,7 +126,7 @@ router.post('/:id/assist',
                     })
                     
             }
-            Event.findByIdAndUpdate(req.params.id, {$pull:{participants:req.user._id}})
+            Event.findByIdAndUpdate(req.params.id, {$pull:{participants:req.user._id}}, {new:true})
                 .populate('posts')
                 .populate('owner')
                 .populate('participants')
